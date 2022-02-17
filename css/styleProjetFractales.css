@@ -1,0 +1,74 @@
+body {
+    overflow:hidden;
+}
+#background{
+	filter: blur(8px);
+	-webkit-filter: blur(8px);
+	min-width: 100%;
+	min-height: 100%;
+	top: 50%;
+	transform: translatey(-50%);
+}
+#container{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	width: 400px;
+	height: 400px;
+}
+#container > button,img{
+	position: absolute;
+}
+#container > button,#curseurP0,#curseurP1{
+	opacity: 0.2;
+}
+#container > button:hover,#curseurP0:hover,#curseurP1:hover,#curseurP0:focus-within,#curseurP1:focus-within{
+	opacity: 0.9;	
+}
+#curseurP0>span:hover,#curseurP1>span:hover{
+	cursor: pointer;
+}
+#curseurs{
+	height: 100%;
+}
+#curseurP0{
+	float: left;
+	height: 100%;
+	left: -25%;
+	background: #ffffff80;
+	border: 1px solid transparent;
+}
+#curseurP1{
+	float: left;
+	height: 100%;
+	left: -20%;
+	background: #ffffff80;
+	border: 1px solid transparent;
+}
+#left{
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+#right{
+	top: 50%;
+	left: 100%;
+	transform: translate(-50%,-50%);
+}
+#up{
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+#down{
+	top: 100%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+#zoomin{
+	left: 100%;
+	transform: translatex(-100%);
+}
+#zoomout{
+	left: 100%;
+	transform: translate(-100%,100%);
+}

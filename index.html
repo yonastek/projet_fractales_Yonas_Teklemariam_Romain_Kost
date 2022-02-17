@@ -1,0 +1,218 @@
+<html>
+  <head>
+	<title>Dessin dynamique de fractacles</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="css/bootstrap.min.css"/>
+  <link id="style" rel="stylesheet" type= "text/css" href="css/styleProjetFractales.css"/>
+	<script type="text/javascript" src="jquery/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="jquery/jquery-ui.min.js">
+    </script>
+    <link rel="stylesheet" href="jquery/jquery-ui.min.css"/>
+  </head>
+  <body>
+    <img id="background">
+    <div id="container">
+      <img id="image" class="img-responsive img-rounded"/>
+      <button id="zoomIn"><span class="glyphicon glyphicon-plus"></button>
+      <button id="zoomOut"><span class="glyphicon glyphicon-minus"></button>  
+      <button id="left"><span class="glyphicon glyphicon-chevron-left"></button>
+      <button id="right"><span class="glyphicon glyphicon-chevron-right"></button>  
+      <button id="up"><span class="glyphicon glyphicon-chevron-up"></button>
+      <button id="down"><span class="glyphicon glyphicon-chevron-down"></button>
+      
+      <div id="curseurs">
+        <div id="curseurP0"></div>  
+        <div id="curseurP1"></div> 
+      </div>   
+    </div>
+
+  	<script>
+      var startUrl = "http://www.arthy.org/cgi-bin/fractal_cgi?field=complex&type=mandelbrot&size=400&iter=200";
+      var p0 = 0;
+      var p1 = 0;
+      var o0 = 0;
+      var o1 = 0;
+      var zoomInitial = 1.5;
+      var ab = zoomInitial;
+      var loaded = true;
+      var interval;
+
+      
+      $( document ).ready(function() {
+        changeImage();
+        
+        //------------------------------------zoom-----------------------------------
+        $("#zoomIn").button().mousedown(function(){
+          if(loaded){
+            ab *= 0.9;
+            loaded = false;
+            changeImage();
+          }
+          interval = setInterval(function(){ //on utilise setInterval afin de continuer l'action du bouton sur lequel on a appuyé lorsque tant qu'on reste appuyé dessus
+            if(loaded){
+              ab *= 0.9;
+              loaded = false;
+              changeImage();
+            }
+          },100);
+        });
+        $("#zoomIn").button().mouseup(function(){
+          clearInterval(interval);
+        });
+        $("#zoomIn").button().mouseout(function(){
+          clearInterval(interval);
+        });
+        
+        $("#zoomOut").button().mousedown(function(){
+          if(loaded){
+            ab *= 1.1;
+            loaded = false;
+            changeImage();
+          }
+          interval = setInterval(function(){
+            if(loaded){
+              ab *= 1.1;
+              loaded = false;
+              changeImage();
+            }
+          },100);
+        });
+        $("#zoomOut").button().mouseup(function(){
+          clearInterval(interval);
+        });
+        $("#zoomOut").button().mouseout(function(){
+          clearInterval(interval);
+        });
+
+        //------------------------------------déplacement-----------------------------------
+        $("#left").button().mousedown(function(){
+          if(loaded){
+            o0 -= (0.2/zoomInitial*ab); //on fait ce calcul afin que le déplacement soit proportionnel au zoom
+            loaded = false;
+            changeImage();
+          }
+          interval = setInterval(function(){
+            if(loaded){
+              o0 -= (0.2/zoomInitial*ab);
+              loaded = false;
+              changeImage();
+            }
+          },100);
+        });
+        $("#left").button().mouseup(function(){
+          clearInterval(interval);
+        });
+        $("#left").button().mouseout(function(){
+          clearInterval(interval);
+        });
+
+        $("#right").button().mousedown(function(){
+          if(loaded){
+            o0 += (0.2/zoomInitial*ab);
+            loaded = false;
+            changeImage();
+          }
+          interval = setInterval(function(){
+            if(loaded){
+              o0 += (0.2/zoomInitial*ab);
+              loaded = false;
+              changeImage();
+            }
+          },100);
+        });
+        $("#right").button().mouseup(function(){
+          clearInterval(interval);
+        });
+        $("#right").button().mouseout(function(){
+          clearInterval(interval);
+        });
+
+        $("#up").button().mousedown(function(){
+          if(loaded){
+            o1 -= (0.2/zoomInitial*ab);
+            loaded = false;
+            changeImage();
+          }
+          interval = setInterval(function(){
+            if(loaded){
+              o1 -= (0.2/zoomInitial*ab);
+              loaded = false;
+              changeImage();
+            }
+          },100);
+        });
+        $("#up").button().mouseup(function(){
+          clearInterval(interval);
+        });
+        $("#up").button().mouseout(function(){
+          clearInterval(interval);
+        });
+
+        $("#down").button().mousedown(function(){
+          if(loaded){
+            o1 += (0.2/zoomInitial*ab);
+            loaded = false;
+            changeImage();
+          }
+          interval = setInterval(function(){
+            if(loaded){
+              o1 += (0.2/zoomInitial*ab);
+              loaded = false;
+              changeImage();
+            }
+          },100);
+        });
+        $("#down").button().mouseup(function(){
+          clearInterval(interval);
+        });
+        $("#down").button().mouseout(function(){
+          clearInterval(interval);
+        });
+
+        //------------------------------------curseurs-----------------------------------
+        
+        $("#curseurP0").slider({
+          min : -1,
+          max : 1,
+          step : 0.1,
+          value : p0,
+          orientation: "vertical",
+          slide : changeP0
+        });
+
+        $("#curseurP1").slider({
+          min : -1,
+          max : 1,
+          step : 0.1,
+          value : p1,
+          orientation: "vertical",
+          slide : changeP1
+        });
+
+        //------------------------------------fonctions-----------------------------------
+        function changeP0(event,ui){
+          p0 = ui.value;
+          $("#curseurP0").slider( "disable" ); //on desactive le slider afin d'être sur d'avoir le temps de charger l'image avant un nouveau changement de la valeur du slider
+          changeImage();
+        }
+        function changeP1(event,ui){
+          p1 = ui.value;
+          $("#curseurP1").slider( "disable" );
+          changeImage();
+        }
+        function changeImage(){
+          $("#image").attr("src",startUrl+"&p0="+p0+"&p1="+p1+"&o0="+o0+"&o1="+o1+"&a0="+ab+"&b1="+ab);
+        }
+
+        $("#style").attr("href","css/styleProjetFractales.css");
+        $("#image").load(function() {
+            $("#curseurP0").slider( "enable" );
+            $("#curseurP1").slider( "enable" );
+            loaded = true;
+            $("#background").attr("src", $("#image").attr("src")); //on met la même image en background
+          });
+      });
+    </script>
+  </body>
+</html>
